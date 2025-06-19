@@ -1,0 +1,22 @@
+
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- 书本封面 -->
+    <path d="M10 10H25V28H10V10Z" fill="url(#paint_book)"/>
+
+    <!-- 书脊 -->
+    <path d="M9 10H7V28H9V10Z" fill="#333366"/>
+
+    <!-- 打开的页面 -->
+    <path d="M12 12H22V16H12V12Z" fill="#E0F0FF"/>
+    <path d="M12 18H20V22H12V18Z" fill="#C0E0FF"/>
+    <path d="M12 24H18V26H12V24Z" fill="#A0D0FF"/>
+
+    <!-- 渐变定义 -->
+    <defs>
+        <linearGradient id="paint_book" x1="10" y1="10" x2="25" y2="28" gradientUnits="userSpaceOnUse">
+            <stop offset="0" stop-color="#66CCFF"/>
+            <stop offset="0.5" stop-color="#3399FF"/>
+            <stop offset="1" stop-color="#0066CC"/>
+        </linearGradient>
+    </defs>
+</svg>

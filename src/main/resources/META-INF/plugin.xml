@@ -1,0 +1,45 @@
+<!-- Plugin Configuration File. Read more: https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin>
+    <!-- Unique identifier of the plugin. It should be FQN. It cannot be changed between the plugin versions. -->
+    <id>com.clearwind.clear-ebook</id>
+
+    <!-- Public plugin name should be written in Title Case.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-name -->
+    <name>Clear Ebook</name>
+
+    <!-- A displayed Vendor name or Organization ID displayed on the Plugins Page. -->
+    <vendor email="clear-wind@foxmail.com" url="https://clear-wind.com">晴天和风</vendor>
+
+    <!-- Description of the plugin displayed on the Plugin Page and IDE Plugin Manager.
+         Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
+         Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
+    <description><![CDATA[
+    Enter short description for your plugin here.<br>
+    <em>most HTML tags may be used</em>
+  ]]></description>
+
+    <!-- Product and plugin compatibility requirements.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-compatibility.html -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <!-- Extension points defined by the plugin.
+         Read more: https://plugins.jetbrains.com/docs/intellij/plugin-extension-points.html -->
+    <extensions defaultExtensionNs="com.intellij">
+        <applicationService serviceImplementation="com.clearwind.clearebook.setting.AppSettingsState"/>
+        <applicationConfigurable
+                parentId="tools"
+                instance="com.clearwind.clearebook.setting.AppSettingsConfigurable"
+                id="com.clearwind.clearebook.setting.AppSettingsConfigurable"
+                displayName="Ebook Reader"/>
+        <toolWindow canCloseContents="true" anchor="left"
+                    id="CLear eBook"
+                    factoryClass="com.clearwind.clearebook.window.MainToolWindowFactory">
+        </toolWindow>
+    </extensions>
+    <actions>
+        <group id="Ebook" text="Ebook Read" popup="true">
+            <add-to-group group-id="ToolsMenu" anchor="first"/>
+            <action id="configuration" class="com.clearwind.clearebook.control.Setting" text="Configuration"/>
+        </group>
+    </actions>
+</idea-plugin>
