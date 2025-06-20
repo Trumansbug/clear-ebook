@@ -1,29 +1,16 @@
 package com.clearwind.clearebook.setting;
 
-import com.clearwind.clearebook.window.MainToolWindowFactory;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.components.PersistentStateComponent;
 import com.intellij.openapi.components.State;
 import com.intellij.openapi.components.Storage;
 import com.intellij.util.xmlb.XmlSerializerUtil;
-import com.intellij.util.xmlb.annotations.Transient;
 import lombok.Data;
-import nl.siegmann.epublib.domain.Book;
-import nl.siegmann.epublib.domain.Resource;
-import nl.siegmann.epublib.domain.TOCReference;
-import nl.siegmann.epublib.domain.TableOfContents;
-import nl.siegmann.epublib.epub.EpubReader;
-import org.apache.commons.lang3.StringUtils;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jsoup.Jsoup;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.*;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 @State(
         name = "com.clearwind.clearebook.setting.AppSettingsState",
@@ -35,6 +22,14 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      * 书籍路径
      */
     private String bookPath = "";
+    /**
+     * 书籍类型
+     */
+    private String fileType = "";
+    /**
+     * 
+     */
+    private String contentType = "text/plain";
     /**
      * 章节
      */
@@ -51,7 +46,13 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
      * 字体大小
      */
     private int fontSize = 14;
+    /**
+     * 章节匹配表达式
+     */
+    private String chapterPattern = "^第.*章";
 
+    
+    
     public static AppSettingsState getInstance() {
         return ApplicationManager.getApplication().getService(AppSettingsState.class);
     }
@@ -64,17 +65,5 @@ public class AppSettingsState implements PersistentStateComponent<AppSettingsSta
     @Override
     public void loadState(@NotNull AppSettingsState state) {
         XmlSerializerUtil.copyBean(state, this);
-    }
-
-    public void init() {
-        MainToolWindowFactory mainToolWindowFactory = MainToolWindowFactory.getInstance();
-        mainToolWindowFactory.refresh();
-    }
-
-    public static Book getBook(String path) throws IOException {
-        try (FileInputStream inputStream = new FileInputStream(path)) {
-            EpubReader epubReader = new EpubReader();
-            return epubReader.readEpub(inputStream);
-        }
     }
 }

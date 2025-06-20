@@ -1,29 +1,23 @@
 package com.clearwind.clearebook.window;
 
+import com.clearwind.clearebook.analysis.EBookAnalysis;
+import com.clearwind.clearebook.factory.EBookAnalysisFactory;
 import com.clearwind.clearebook.setting.AppSettingsState;
+import com.clearwind.clearebook.utils.FileUtil;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.ComboBox;
 import com.intellij.openapi.wm.ToolWindow;
 import com.intellij.openapi.wm.ToolWindowFactory;
 import com.intellij.ui.components.JBPanel;
+import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.content.Content;
 import com.intellij.ui.content.ContentFactory;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
-import nl.siegmann.epublib.domain.Book;
-import nl.siegmann.epublib.domain.Resource;
-import nl.siegmann.epublib.domain.TOCReference;
 import org.jetbrains.annotations.NotNull;
-import org.jsoup.Jsoup;
-
-import java.awt.*;
-import java.util.Optional;
-import com.intellij.ui.components.JBScrollPane;
-import org.jsoup.nodes.Document;
-import org.jsoup.nodes.Element;
-import org.jsoup.select.Elements;
 
 import javax.swing.*;
+import java.awt.*;
 
 @Slf4j
 public class MainToolWindowFactory implements ToolWindowFactory {
@@ -60,7 +54,7 @@ public class MainToolWindowFactory implements ToolWindowFactory {
 
         public MainToolWindowContent() {
             editorPane = new JEditorPane();
-            editorPane.setContentType("text/html");
+            editorPane.setContentType(settingsState.getContentType());
             editorPane.setEditable(false);
             editorPane.setFont(new Font(settingsState.getFontName(), Font.PLAIN, settingsState.getFontSize()));
 
@@ -90,13 +84,7 @@ public class MainToolWindowFactory implements ToolWindowFactory {
             contentPanel.add(bottomPanel, BorderLayout.SOUTH);
 
             // 读取书籍
-            try {
-                Book book = AppSettingsState.getBook(settingsState.getBookPath());
-                book.getTableOfContents().getTocReferences().forEach(each -> chapterComboBox.addItem(each.getTitle()));
-            } catch (Exception e) {
-                log.error("初始化书籍失败：{}", e.getMessage(), e);
-            }
-            
+            settingsState.getChapter().keySet().forEach(chapterComboBox::addItem);
 
             // 绑定章节选择事件
             chapterComboBox.addActionListener(e -> loadChapterContent());
@@ -131,25 +119,8 @@ public class MainToolWindowFactory implements ToolWindowFactory {
 
         private String getChapterContent(String chapterTitle) {
             try {
-                Book book = AppSettingsState.getBook(settingsState.getBookPath());
-                Optional<Resource> resourceOptional = book.getTableOfContents().getTocReferences().stream()
-                        .filter(each -> each.getTitle().equals(chapterTitle))
-                        .findFirst()
-                        .map(TOCReference::getResource);
-                if (resourceOptional.isEmpty()) {
-                    return "加载章节失败";
-                }
-
-                String html = new String(resourceOptional.get().getData());
-                Document doc = Jsoup.parse(html);
-                Elements paragraphs = doc.select("p"); // 提取所有 <p> 段落
-
-                StringBuilder contentBuilder = new StringBuilder();
-                for (Element p : paragraphs) {
-                    contentBuilder.append("<p>").append(p.text()).append("</p>");
-                }
-
-                return contentBuilder.toString();
+                EBookAnalysis eBookAnalysis = EBookAnalysisFactory.getAnalysis(FileUtil.getFileExtension(settingsState.getBookPath()));
+                return eBookAnalysis.getChapterContent(chapterTitle);
             } catch (Exception e) {
                 log.error("加载章节失败：{}", e.getMessage(), e);
                 return "加载章节出错";
