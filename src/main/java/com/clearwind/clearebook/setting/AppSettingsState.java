@@ -27,7 +27,7 @@ import java.util.*;
 
 @State(
         name = "com.clearwind.clearebook.setting.AppSettingsState",
-        storages = @Storage("EbookReader.xml")
+        storages = @Storage("ClearEBook.xml")
 )
 @Data
 public class AppSettingsState implements PersistentStateComponent<AppSettingsState> {

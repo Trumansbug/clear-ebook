@@ -14,8 +14,7 @@
          Simple HTML elements (text formatting, paragraphs, and lists) can be added inside of <![CDATA[ ]]> tag.
          Guidelines: https://plugins.jetbrains.com/docs/marketplace/plugin-overview-page.html#plugin-description -->
     <description><![CDATA[
-    Enter short description for your plugin here.<br>
-    <em>most HTML tags may be used</em>
+    一款用于阅读电子读物的 idea plugin
   ]]></description>
 
     <!-- Product and plugin compatibility requirements.
@@ -30,14 +29,14 @@
                 parentId="tools"
                 instance="com.clearwind.clearebook.setting.AppSettingsConfigurable"
                 id="com.clearwind.clearebook.setting.AppSettingsConfigurable"
-                displayName="Ebook Reader"/>
+                displayName="Clear EBook"/>
         <toolWindow canCloseContents="true" anchor="left"
-                    id="CLear eBook"
+                    id="Clear EBook"
                     factoryClass="com.clearwind.clearebook.window.MainToolWindowFactory">
         </toolWindow>
     </extensions>
     <actions>
-        <group id="Ebook" text="Ebook Read" popup="true">
+        <group id="Ebook" text="Clear EBook" popup="true">
             <add-to-group group-id="ToolsMenu" anchor="first"/>
             <action id="configuration" class="com.clearwind.clearebook.control.Setting" text="Configuration"/>
         </group>
